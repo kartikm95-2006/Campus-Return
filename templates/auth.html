@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Create account' if mode == 'register' else 'Sign in' }}{% endblock %}
+{% block content %}
+<section class="auth-layout"><div class="auth-art"><span class="eyebrow">CAMPUS, CONNECTED</span><h1>Good things<br>come back.</h1><p>Lost your keys between class and coffee? Start with the board.</p><span class="auth-art-caption">CAMPUS RETURN · 01</span></div>
+  <div class="auth-form-wrap"><p class="eyebrow">{{ 'YOUR CAMPUS ACCOUNT' if mode == 'register' else 'WELCOME BACK' }}</p><h2>{{ 'Join the board' if mode == 'register' else 'Sign in' }}</h2><p class="form-lead">{{ 'Use your campus email to post reports and manage claims.' if mode == 'register' else 'Pick up where you left off on the campus board.' }}</p>
+    <form class="stack-form" method="post">
+      {% if mode == 'register' %}<label>Your name<input name="name" maxlength="80" autocomplete="name" required value="{{ request.form.get('name', '') }}"></label>{% endif %}
+      <label>Campus email<input type="email" name="email" autocomplete="email" required value="{{ request.form.get('email', '') }}"></label>
+      <label>Password<input type="password" name="password" minlength="8" autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}" required></label>
+      <button class="button button-dark button-wide" type="submit">{{ 'Create account' if mode == 'register' else 'Sign in to Campus Return' }} <span>→</span></button>
+    </form>
+    <p class="switch-auth">{{ 'Already on the board?' if mode == 'register' else 'New to Campus Return?' }} <a href="{{ url_for('login' if mode == 'register' else 'register') }}">{{ 'Sign in' if mode == 'register' else 'Create an account' }}</a></p>
+  </div>
+</section>
+{% endblock %}

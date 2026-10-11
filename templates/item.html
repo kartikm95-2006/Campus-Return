@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}{{ item['title'] }}{% endblock %}
+{% block content %}
+<section class="detail-layout"><div class="detail-main">
+  <a class="back-link" href="{{ url_for('index') }}">← Back to board</a>
+  {% if item['photo'] %}<img class="detail-photo" src="{{ url_for('uploaded_file', filename=item['photo']) }}" alt="Photo of {{ item['title'] }}">{% else %}<div class="detail-placeholder"><span>{{ item['category'] }}</span><b>{{ item['kind']|upper }} REPORT</b></div>{% endif %}
+  <div class="detail-overline"><span class="kind-tag kind-{{ item['kind'] }}">{{ item['kind'] }}</span><span>{{ item['category'] }}</span><span>{{ item['event_date'] }}</span></div>
+  <h1>{{ item['title'] }}</h1><p class="detail-description">{{ item['description'] }}</p>
+  <div class="detail-facts"><div><span>Last seen / found</span><b>{{ item['location'] }}</b></div><div><span>Report status</span><b class="status status-{{ item['status'] }}">{{ item['status'] }}</b></div><div><span>Posted by</span><b>{{ item['reporter'] }}</b></div></div>
+  {% if g.user and g.user['role'] == 'admin' and item['verification_details'] %}<div class="private-detail"><span>ADMIN ONLY · VERIFICATION DETAIL</span><p>{{ item['verification_details'] }}</p></div>{% endif %}
+  {% if item['kind'] == 'lost' and matches %}<section class="suggestions"><div class="section-heading"><div><p class="eyebrow">SUGGESTED FOUND REPORTS</p><h2>Could this be yours?</h2></div></div>{% for score, match in matches %}<a class="match-row" href="{{ url_for('item_detail', item_id=match['id']) }}"><span class="match-score">{{ score }}<small>%</small></span><span><b>{{ match['title'] }}</b><small>{{ match['location'] }} · {{ match['event_date'] }}</small></span><span class="match-arrow">→</span></a>{% endfor %}</section>{% endif %}
+</div>
+<aside class="detail-aside">
+  {% if item['kind'] == 'found' and item['status'] == 'open' %}
+    <p class="eyebrow">RECOGNIZE THIS ITEM?</p><h2>Tell us why it’s yours.</h2><p>Your answer is private and reviewed by a campus admin. Be specific about a detail not shown on this page.</p>
+    {% if not g.user %}<a class="button button-dark button-wide" href="{{ url_for('login') }}">Sign in to claim <span>→</span></a>
+    {% elif item['user_id'] == g.user['id'] %}<p class="notice-box">This is your report. You can manage its status from My activity.</p>
+    {% elif existing_claim %}<p class="notice-box">You have already submitted a claim for this item.</p>
+    {% else %}<form class="stack-form claim-form" method="post"><label>Private identifying details<textarea name="details" rows="5" minlength="10" maxlength="1000" required placeholder="Describe a mark, contents, or another detail only the owner would know."></textarea></label><button class="button button-dark button-wide" type="submit">Submit ownership claim <span>→</span></button></form>{% endif %}
+  {% elif item['status'] != 'open' %}<p class="eyebrow">REPORT CLOSED</p><h2>This item is {{ item['status'] }}.</h2><p>Browse the board for other reports or check back on your own activity.</p><a class="text-link" href="{{ url_for('index') }}">Browse the board →</a>
+  {% else %}<p class="eyebrow">CAN YOU HELP?</p><h2>Seen something similar?</h2><p>Browse found reports and send in a possible match to help it get home.</p><a class="button button-dark button-wide" href="{{ url_for('index', kind='found') }}">Browse found items <span>→</span></a>{% endif %}
+</aside></section>
+{% endblock %}

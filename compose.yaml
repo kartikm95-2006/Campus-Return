@@ -1,0 +1,15 @@
+services:
+  campus-hub:
+    build: .
+    ports:
+      - "${HOST_PORT:-5001}:5000"
+    environment:
+      SECRET_KEY: ${SECRET_KEY:-replace-this-before-deployment}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@campus.edu}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-CampusAdmin123!}
+    volumes:
+      - campus-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  campus-data:

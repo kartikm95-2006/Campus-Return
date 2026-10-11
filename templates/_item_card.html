@@ -1,0 +1,13 @@
+<article class="item-card">
+  <a class="item-image" href="{{ url_for('item_detail', item_id=item['id']) }}" aria-label="View {{ item['title'] }}">
+    {% if item['photo'] %}<img src="{{ url_for('uploaded_file', filename=item['photo']) }}" alt="Photo of {{ item['title'] }}">
+    {% else %}<span class="image-placeholder"><span>{{ item['category'] }}</span><b>{{ item['kind']|upper }}</b></span>{% endif %}
+    <span class="kind-tag kind-{{ item['kind'] }}">{{ item['kind'] }}</span>
+  </a>
+  <div class="item-card-body">
+    <div class="item-meta"><span>{{ item['category'] }}</span><span>{{ item['event_date'] }}</span></div>
+    <h3><a href="{{ url_for('item_detail', item_id=item['id']) }}">{{ item['title'] }}</a></h3>
+    <p class="item-description">{{ item['description'] }}</p>
+    <div class="item-card-bottom"><span class="location-label">{{ item['location'] }}</span><span class="status status-{{ item['status'] }}">{{ item['status'] }}</span></div>
+  </div>
+</article>

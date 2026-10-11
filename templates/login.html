@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#183c36">
+  <title>Sign in | Campus Return</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="login-page">
+  <header class="login-header">
+    <div class="brand"><span class="brand-mark">CR</span><span>Campus<span class="brand-light">Return</span></span></div>
+  </header>
+  <main class="login-main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}<div class="flash-stack" role="status">{% for category, message in messages %}<div class="flash flash-{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    <section class="auth-layout">
+      <div class="auth-art"><span class="eyebrow">CAMPUS, CONNECTED</span><h1>Good things<br>come back.</h1><p>Sign in to follow a report, submit an ownership claim, or help someone find what they lost.</p><span class="auth-art-caption">CAMPUS RETURN · 01</span></div>
+      <div class="auth-form-wrap"><p class="eyebrow">WELCOME BACK</p><h2>Sign in</h2><p class="form-lead">Use your campus account to continue.</p>
+        <form class="stack-form" method="post">
+          <label>Campus email<input type="email" name="email" autocomplete="email" required value="{{ request.form.get('email', '') }}"></label>
+          <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
+          <button class="button button-dark button-wide" type="submit">Sign in to Campus Return <span>→</span></button>
+        </form>
+        <p class="switch-auth">New to Campus Return? <a href="{{ url_for('register') }}">Create an account</a></p>
+      </div>
+    </section>
+  </main>
+  <footer class="login-footer"><span>Campus Return</span><span>A little less lost, together.</span></footer>
+</body>
+</html>

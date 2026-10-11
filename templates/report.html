@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Post a report{% endblock %}
+{% block content %}
+<section class="form-page"><div class="page-heading"><p class="eyebrow">ADD TO THE BOARD</p><h1>Start a report</h1><p>Share the useful details. Your contact information stays private to your account.</p></div>
+  <form class="report-form" method="post" enctype="multipart/form-data">
+    <div class="form-row"><label>Report type<select name="kind" required><option value="lost" {{ 'selected' if request.form.get('kind') == 'lost' }}>I lost something</option><option value="found" {{ 'selected' if request.form.get('kind') == 'found' }}>I found something</option></select></label><label>Category<select name="category" required><option value="">Choose a category</option>{% for category in config['CATEGORIES'] %}<option {{ 'selected' if request.form.get('category') == category }}>{{ category }}</option>{% endfor %}</select></label></div>
+    <label>Item name<input name="title" maxlength="100" required placeholder="For example, blue insulated bottle" value="{{ request.form.get('title', '') }}"></label>
+    <label>Description<textarea name="description" rows="4" minlength="10" maxlength="1500" required placeholder="Color, brand, case, markings, or anything that could help identify it.">{{ request.form.get('description', '') }}</textarea></label>
+    <div class="form-row"><label>Campus location<select name="location" required><option value="">Choose a location</option>{% for location in config['LOCATIONS'] %}<option {{ 'selected' if request.form.get('location') == location }}>{{ location }}</option>{% endfor %}</select></label><label>{{ 'Date lost or found' }}<input type="date" name="event_date" required value="{{ request.form.get('event_date', '') }}"></label></div>
+    <label>Photo <span class="optional">Optional · JPG, PNG or WEBP · up to 5 MB</span><input type="file" name="photo" accept="image/jpeg,image/png,image/webp"></label>
+    <label>Private verification detail <span class="optional">Found reports only · visible to admins, not on the public board</span><textarea name="verification_details" rows="2" maxlength="500" placeholder="A detail the owner should know but a claimant must prove.">{{ request.form.get('verification_details', '') }}</textarea></label>
+    <div class="form-actions"><a class="text-link" href="{{ url_for('index') }}">Cancel</a><button class="button button-dark" type="submit">Publish report <span>→</span></button></div>
+  </form>
+</section>
+{% endblock %}
